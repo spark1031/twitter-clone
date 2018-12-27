@@ -9,10 +9,7 @@ const passport = require('passport');
 const validateRegisterInput = require('../../validation/register');
 const validateLoginInput = require('../../validation/login');
 
-router.get("/test", (req, res) => res.json({
-	msg: "This is the users route"
-}));
-
+//NEW USER REGISTRATION ROUTE
 //the callback is basically our controller
 router.post('/register', (req, res) => {
 	const {
@@ -53,6 +50,8 @@ router.post('/register', (req, res) => {
 		});
 });
 
+
+//USER LOGIN ROUTE
 router.post("/login", (req, res) => {
 	const {
 		errors,
@@ -108,6 +107,17 @@ router.post("/login", (req, res) => {
 					}
 				});
 		});
+});
+
+//ROUTE TO GET CURRENT USER
+router.get('/current', passport.authenticate('jwt', {
+	session: false
+}), (req, res) => {
+	res.json({
+		id: req.user.id,
+		handle: req.user.handle,
+		email: req.user.email
+	});
 });
 
 //we want to give the client back a jwt that will allow that user to stay logged in during their session

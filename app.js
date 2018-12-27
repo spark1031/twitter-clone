@@ -11,7 +11,7 @@ const tweets = require("./routes/api/tweets");
 const User = require('./models/User');
 //import body parser to parse the JSON we send to our frontend (allows us to use Postman)
 const bodyParser = require('body-parser');
-
+const passport = require('passport');
 
 
 //connect to MongoDB using Mongoose
@@ -22,6 +22,8 @@ mongoose
 	.then(() => console.log("Connected to MongoDB successfully"))
 	.catch(err => console.log(err));
 
+app.use(passport.initialize());
+require('./config/passport')(passport);
 //tells our app to respond to json requests
 //urlencoded - our app will also respond to requests from other software, like Postman
 app.use(bodyParser.urlencoded({
@@ -41,10 +43,7 @@ app.get("/", (req, res) => {
 });
 app.use("/api/users", users);
 app.use("/api/tweets", tweets);
-app.use(bodyParser.urlencoded({
-	extended: false
-}));
-app.use(bodyParser.json());
+
 
 //determine which port to run server on (process.env.PORT is what we need our app to run on for deploying to Heroku)
 const port = process.env.PORT || 5000;
