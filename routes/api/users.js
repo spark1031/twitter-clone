@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const User = require('../../models/User');
 const bcrypt = require('bcryptjs');
+const keys = require('../../config/keys');
 
 router.get("/test", (req, res) => res.json({
 	msg: "This is the users route"
@@ -67,6 +68,11 @@ router.post("/login", (req, res) => {
 				});
 		});
 });
+
+//we want to give the client back a jwt that will allow that user to stay logged in during their session
+//  this requires a secret key (must be unique, difficult to guess, create in keys.js file)
+//    this secret key will be used to sign jwts (so we need to import it into this file - const keys)
+//  we cross check the secret key and the jwt and if they match up then we know the user is logged in
 
 
 module.exports = router;
