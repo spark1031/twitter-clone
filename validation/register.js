@@ -33,7 +33,7 @@ module.exports = function validateRegisterInput(data) {
 	}
 
 	if (!Validator.isLength(data.password, {
-			min: 20,
+			min: 2,
 			max: 30
 		})) {
 		errors.password = "Password must be between 2 and 30 characters.";
