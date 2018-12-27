@@ -38,5 +38,35 @@ router.post('/register', (req, res) => {
 		});
 });
 
+router.post("/login", (req, res) => {
+	const email = req.body.email;
+	const password = req.body.password;
+
+	//User.find returns an array of objects, User.findOne just returns the object
+	User.findOne({
+			email
+		})
+		.then(user => {
+			if (!user) {
+				//let frontend know that the user does not exist
+				return res.status(404).json({
+					email: "This user does not exist."
+				});
+			}
+			bcrypt.compare(password, user.password)
+				.then(isMatch => {
+					if (isMatch) {
+						res.json({
+							msg: "Success"
+						});
+					} else {
+						return res.status(400).json({
+							password: "Password was incorrect."
+						});
+					}
+				});
+		});
+});
+
 
 module.exports = router;
